@@ -3,137 +3,74 @@ $(document).ready(function() {
   for(var i = 0; i < 100; i++) {
     $("tr").append("<td></td>");
   }
+ 
 
-  var cells = $('#Player2 td');
-  var cells_length = cells.length
+  var fruits = {};
+  function rayuela(player) {
 
-
-  function rayuela(index, interval){
-    var cell = cells.eq(index%cells_length);
-    console.log(cell);
-    if (cell.is('.active')) {
-      cell.removeClass('active');
-    } else {
-      cell.addClass('active');
-      cell.prev().removeClass('active')
-    }
-    var res = null;
-    myVar = setTimeout(function(){
-      rayuela(++index, interval);
-      // console.log(index);
-      // if (index >= 85) {
-      //   console.log("ochenta y cinco!!");
-      // }
-    }, interval)
-
-    // $('#parent .child').click(function() {
-    //     var index = $(this).index();
-    // });
-    if(cell.is(':last-child')) {
-      clearTimeout(myVar);
-    }
-    // console.log($('#Player2 .active').index());
-    // $( document ).keyup(function(e) {
-    //   if (e.key == "d") {
-    //     console.log(e);
-    //     clearTimeout(myVar);
-    //     console.log(index);
-    //   }
-    // });
-  }
-
-  rayuela(0, 45);
-
-  function myStopFunction() {
-    $( document ).keyup(function(e) {
-      if (e.key == "d") {
-        console.log(e);
-        clearTimeout(myVar);
-        console.log($('#Player2 .active').index());
+    var rayy = setInterval(function() {
+      $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
+      if ($('#' + player + ' .active').index() === 102) {
+        clearInterval(rayy);
+        // fruits[player] = $('#' + player + ' .active').index();
+        console.log(fruits)
       }
+      if ($('#' + player + ' .active').index() === 85) {
+        $('#' + player).addClass("looser");
+      }
+    }, 40);
+
+    $( document ).keyup(function(e) {
+      if (player == "Player1") {
+        if (e.key == "d") {   
+          clearInterval(rayy);
+          fruits['Player1'] = $('#' + player + ' .active').index();
+        }  
+      }
+      if (player == "Player2") {
+        if (e.key == "f") { 
+          clearInterval(rayy);
+          fruits['Player2'] = $('#' + player + ' .active').index();
+        }
+      } 
+
+      if (fruits['Player1'] > fruits['Player2'] && fruits['Player1'] < 85 && fruits['Player2'] < 85) {
+        $('#Player1').addClass("winner");
+        console.log("gana 1");
+        fruits = {};  
+      } else if (fruits['Player2'] > fruits['Player1'] && fruits['Player2'] < 85 && fruits['Player1'] < 85) {
+        $('#Player2').addClass("winner");
+        console.log("gana 2"); 
+        fruits = {};
+      } else if ($("#Player1").hasClass("looser") && fruits['Player2'] < 85) {
+        $('#Player2').addClass("winner");
+        console.log("gana 2 def"); 
+        fruits = {};
+      } else if (fruits['Player2'] === 102) {
+        $('#Player1').addClass("winner");
+        console.log("gana 1 def"); 
+        fruits = {};
+      } 
+      console.log(fruits['Player2'])
     });
+
   }
-  // console.log(res);
-
-  myStopFunction();
-
-
-  // var needStop = false;
-
-// var buttons = $('.button'),
-//     buttons_length = buttons.length;
-
-// function sliiide(index, interval){
-//     var button = buttons.eq(index%buttons_length);
-//     if(button.css('background-color') == 'rgb(0, 0, 255)'){ //blue
-//         button.css({
-//             background: 'white'
-//         });
-//     }
-//     else {
-//         button.css({
-//             background: 'blue'
-//         });
-//     }
-
-//     setTimeout(function(){
-//         sliiide(++index, interval);
-//     }, interval)
-// }
-
-
-// sliiide(0, 500);
-
-  // console.log(needStop)
-  // function yea(){
-  //   needStop = true;
-  // }
-    // $("#Player2 td").each(function(){
-    //   var el=$(this);
-    //   setInterval(function(i) {
-    //     if ($(el).next().length) {
-    //       el.removeClass("active").next().addClass("active");
-    //     }
-    //   }, 50);
-    // });
-  // function throw_coin(player) {
-  //   $("#" + player + " td" ).each(function(i) {
-  //     var el=$(this);
-  //     myVar = setTimeout(function() {
-  //       if ($(el).next().length) {
-  //         el.removeClass("active").next().addClass("active");
-  //       }
-  //     }, i * 50);
-  //     $( document ).keyup(function(e) {
-  //       if (e.key == "d") {
-  //         console.log(e);
-  //         needStop = true;
-
-  //       }
-  //     });
-  //     console.log(needStop)
-  //     if (needStop == true) {
-  //       return false;
-  //     }
-  //   });
-  // }
-  // throw_coin("Player2");
-  // function myStopFunction() {
-
-  // }
-  // myStopFunction();
-//   var myVar = setInterval(function(){ myTimer() }, 1000);
-
-// function myTimer() {
-//     var d = new Date();
-//     var t = d.toLocaleTimeString();
-//     document.getElementById("demo").innerHTML = t;
-// }
-
-// function myStopFunction() {
-//     clearInterval(myVar);
-// }
-
+  // setTimeout(rayuela('Player2'), 3000);
+  // rayuela('Player2');
+  // rayuela("Player1");
+  function rayuelas() {
+    $('#Player1 td').eq(2).addClass("active");
+    $('#Player1 td').eq(2).siblings().removeClass("active");
+    $('#Player2 td').eq(2).addClass("active");
+    $('#Player2 td').eq(2).siblings().removeClass("active");
+    $('#Player1').removeClass("winner");
+    $('#Player2').removeClass("winner");
+    $('#Player1').removeClass("looser");
+    $('#Player2').removeClass("looser");
+    rayuela('Player1');
+    rayuela('Player2');
+  }
+  $("#start_btn").click(rayuelas);
 });
 
 

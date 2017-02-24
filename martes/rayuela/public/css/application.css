@@ -48,7 +48,7 @@ table, tr {
 }
 
 .table td {
-  background-color: white;
+  
   height: 20px;
   width: 20px;
 }
@@ -59,4 +59,12 @@ table, tr {
 
 .table td.active {
   background-color: black;
+}
+
+.winner {
+  background-color: green;
+}
+
+.looser {
+  background-color: red;
 }
