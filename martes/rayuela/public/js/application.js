@@ -4,45 +4,64 @@ $(document).ready(function() {
     $("tr").append("<td></td>");
   }
 
-  var startPlayer1 = setInterval(function() {
-    rayuela("Player1");
-  }, 40);
+  function game() {
+    $('#Player1 td').eq(2).addClass("active");
+    $('#Player1 td').eq(2).siblings().removeClass("active");
+    $('#Player2 td').eq(2).addClass("active");
+    $('#Player2 td').eq(2).siblings().removeClass("active");
 
-  var startPlayer2 = setInterval(function() {
-    rayuela("Player2");
-  }, 40);
+    var startPlayer1 = setInterval(function() {
+      rayuela("Player1");
+    }, 40);
 
-  function rayuela(player) {
-    $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
-    if ($('#' + player + ' .active').index() === 102) {
-        clearInterval(startPlayer1);
-        clearInterval(startPlayer2);
-        // fruits[player] = $('#' + player + ' .active').index();
+    var startPlayer2 = setInterval(function() {
+      rayuela("Player2");
+    }, 40);
 
-      }
+    var places = {}
 
-    $( document ).keyup(function(e) {
-      if (player == "Player1") {
-        if (e.key == "d") {
+    function rayuela(player) {
+      $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
+      if ($('#' + player + ' .active').index() === 102) {
           clearInterval(startPlayer1);
-          // fruits['Player1'] = $('#' + player + ' .active').index();
-          var indice = $('#' + player + ' .active').index();
-          acaba(indice);
-        }
-      }
-      if (player == "Player2") {
-        if (e.key == "f") {
           clearInterval(startPlayer2);
-          // fruits['Player2'] = $('#' + player + ' .active').index();
-        }
+          // fruits[player] = $('#' + player + ' .active').index();
+      }
+
+
+    }
+    $( document ).keyup(function(e) {
+      if (e.key == "d") {
+        clearInterval(startPlayer1);
+        var endIndex = $('#Player1 .active').index();
+        coinStop("Player1", endIndex);
+      }
+
+      if (e.key == "f") {
+        clearInterval(startPlayer2);
+        var endIndex = $('#Player2 .active').index();
+        coinStop("Player2", endIndex);
       }
     });
 
+    function coinStop(player, endIndex) {
+      places[player] = endIndex;
+      console.log("acabó " + player + " " + endIndex);
+      console.log("objeto")
+      console.log(places)
+      if (Object.keys(places).length === 2) {
+        results(places);
+      }
+
+    }
+
+    function results(places) {
+      console.log("lugares");
+      console.log(places);
+    }
   }
 
-  function acaba(indice) {
-    console.log("acabamos" + indice);
-  }
+  $("#start_btn").click(game);
 
 
 
@@ -88,10 +107,7 @@ $(document).ready(function() {
   // // rayuela('Player2');
   // // rayuela("Player1");
   // function rayuelas() {
-  //   $('#Player1 td').eq(2).addClass("active");
-  //   $('#Player1 td').eq(2).siblings().removeClass("active");
-  //   $('#Player2 td').eq(2).addClass("active");
-  //   $('#Player2 td').eq(2).siblings().removeClass("active");
+
   //   $('#Player1').removeClass("winner");
   //   $('#Player2').removeClass("winner");
   //   $('#Player1').removeClass("looser");
