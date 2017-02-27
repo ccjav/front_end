@@ -23,6 +23,6 @@ end
 
 post '/results' do
 	# params[:winner]
-	p params
+	p params[:game]
 	"pong"
 end

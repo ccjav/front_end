@@ -7,6 +7,8 @@ $(document).ready(function() {
     var new_game = "&game=" + $( '.table' ).data( "game" );
     $.post( "new_game", new_game, function( data ) {
         console.log( data );
+        $( ".table" ).data( "game", data );
+        console.log( $( ".table" ).data("game") );
         // $( "#die" ).html( data );
     });
 
@@ -92,9 +94,9 @@ $(document).ready(function() {
     if (places['Player1'] > places['Player2'] && places['Player1'] < 85 && places['Player2'] < 85) {
       $('#Player1').addClass("winner");
 
-      var winner = "winner=" + $( '#Player1' ).data( "player" ) + "&game=" + $( '.table' ).data( "game" );
-      console.log(winner)
-      $.post( "results", winner, function( data ) {
+      var game = "game=" + $( ".table" ).data("game");
+      console.log(game);
+      $.post( "results", game, function( data ) {
         console.log( data );
         // $( "#die" ).html( data );
       });
