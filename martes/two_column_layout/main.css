@@ -1,0 +1,42 @@
+.container {
+  margin: 0 auto;
+  width: 750px;
+}
+
+header {
+  background-color: black;
+}
+
+#logo {
+  display: block;
+  margin: 0 auto;
+}
+
+.main-title {
+  text-align: center;
+}
+
+.feature {
+  clear: both;
+}
+.feature-text1, .feature-text3 {
+  width: 50%;
+  float: left;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+.feature-text2 {
+  width: 50%;
+  float: right;
+}
+
+.img2 {
+  float: left;
+}
+
+img {
+  /*float: right*/
+}
