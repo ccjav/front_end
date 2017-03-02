@@ -3,74 +3,159 @@ $(document).ready(function() {
   for(var i = 0; i < 100; i++) {
     $("tr").append("<td></td>");
   }
- 
-
-  var fruits = {};
-  function rayuela(player) {
-
-    var rayy = setInterval(function() {
-      $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
-      if ($('#' + player + ' .active').index() === 102) {
-        clearInterval(rayy);
-        // fruits[player] = $('#' + player + ' .active').index();
-        console.log(fruits)
-      }
-      if ($('#' + player + ' .active').index() === 85) {
-        $('#' + player).addClass("looser");
-      }
-    }, 40);
-
-    $( document ).keyup(function(e) {
-      if (player == "Player1") {
-        if (e.key == "d") {   
-          clearInterval(rayy);
-          fruits['Player1'] = $('#' + player + ' .active').index();
-        }  
-      }
-      if (player == "Player2") {
-        if (e.key == "f") { 
-          clearInterval(rayy);
-          fruits['Player2'] = $('#' + player + ' .active').index();
-        }
-      } 
-
-      if (fruits['Player1'] > fruits['Player2'] && fruits['Player1'] < 85 && fruits['Player2'] < 85) {
-        $('#Player1').addClass("winner");
-        console.log("gana 1");
-        fruits = {};  
-      } else if (fruits['Player2'] > fruits['Player1'] && fruits['Player2'] < 85 && fruits['Player1'] < 85) {
-        $('#Player2').addClass("winner");
-        console.log("gana 2"); 
-        fruits = {};
-      } else if ($("#Player1").hasClass("looser") && fruits['Player2'] < 85) {
-        $('#Player2').addClass("winner");
-        console.log("gana 2 def"); 
-        fruits = {};
-      } else if (fruits['Player2'] === 102) {
-        $('#Player1').addClass("winner");
-        console.log("gana 1 def"); 
-        fruits = {};
-      } 
-      console.log(fruits['Player2'])
+  function juego() {
+    var new_game = "&game=" + $( '.table' ).data( "game" );
+    $.post( "new_game", new_game, function( data ) {
+        console.log( data );
+        $( ".table" ).data( "game", data );
+        console.log( $( ".table" ).data("game") );
+        // $( "#die" ).html( data );
     });
 
+    var n = 3;
+    function countDown(){
+      n--;
+      if(n > 0){
+        setTimeout(countDown,1000);
+      }
+      console.log(n);
+    }
+
+
+    countDown();
+    setTimeout(function() {
+      function game() {
+        $('#Player1 td').eq(2).addClass("active");
+        $('#Player1 td').eq(2).siblings().removeClass("active");
+        $('#Player2 td').eq(2).addClass("active");
+        $('#Player2 td').eq(2).siblings().removeClass("active");
+        $('.table tbody').children().removeClass("winner").removeClass("looser");
+
+        var places = {};
+
+        var startPlayer1 = setInterval(function() {
+          rayuela("Player1");
+        }, 40);
+
+        var startPlayer2 = setInterval(function() {
+          rayuela("Player2");
+        }, 40);
+
+        function rayuela(player) {
+          $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
+
+          if ($('#' + player + ' .active').index() === 102) {
+            if (player == "Player1") {
+              clearInterval(startPlayer1);
+            } else if (player == "Player2") {
+              clearInterval(startPlayer2);
+            }
+          }
+
+          if ($('#' + player + ' .active').index() > 85) {
+            $('#' + player).addClass("looser");
+            var endIndex = $('#' + player).index();
+            coinStop(player, endIndex);
+          }
+        }
+
+        $( document ).keyup(function(e) {
+          if (e.key == "d") {
+            clearInterval(startPlayer1);
+            var endIndex = $('#Player1 .active').index();
+
+            coinStop("Player1", endIndex);
+
+          }
+
+          if (e.key == "f") {
+            clearInterval(startPlayer2);
+            var endIndex = $('#Player2 .active').index();
+
+            coinStop("Player2", endIndex);
+
+          }
+        });
+
+        function coinStop(player, endIndex) {
+          places[player] = endIndex;
+
+          if (Object.keys(places).length === 2) {
+            results(places);
+          }
+        }
+
+      }
+      game();
+    }, 3000);
   }
-  // setTimeout(rayuela('Player2'), 3000);
-  // rayuela('Player2');
-  // rayuela("Player1");
-  function rayuelas() {
-    $('#Player1 td').eq(2).addClass("active");
-    $('#Player1 td').eq(2).siblings().removeClass("active");
-    $('#Player2 td').eq(2).addClass("active");
-    $('#Player2 td').eq(2).siblings().removeClass("active");
-    $('#Player1').removeClass("winner");
-    $('#Player2').removeClass("winner");
-    $('#Player1').removeClass("looser");
-    $('#Player2').removeClass("looser");
-    rayuela('Player1');
-    rayuela('Player2');
+
+  function results(places) {
+    if (places['Player1'] > places['Player2'] && places['Player1'] < 85 && places['Player2'] < 85) {
+      $('#Player1').addClass("winner");
+
+      var game = "game=" + $( ".table" ).data("game");
+      console.log(game);
+      $.post( "results", game, function( data ) {
+        console.log( data );
+        // $( "#die" ).html( data );
+      });
+      delete places["Player1"];
+      delete places["Player2"];
+    } else if (places['Player2'] > places['Player1'] && places['Player2'] < 85 && places['Player1'] < 85) {
+      $('#Player2').addClass("winner");
+      delete places["Player1"];
+      delete places["Player2"];
+    } else if ($("#Player1").hasClass("looser") && places['Player2'] < 85) {
+      $('#Player2').addClass("winner");
+      delete places["Player1"];
+      delete places["Player2"];
+    } else if ($("#Player2").hasClass("looser") && places['Player1'] < 85) {
+      $('#Player1').addClass("winner");
+      delete places["Player1"];
+      delete places["Player2"];
+    }
   }
-  $("#start_btn").click(rayuelas);
+
+  $("#start_btn").click(juego);
+
+
+
+  // var fruits = {};
+  // function rayuela(player) {
+
+  //   var rayy = setInterval(function() {
+  //     $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
+  //     if ($('#' + player + ' .active').index() === 102) {
+  //       clearInterval(rayy);
+  //       // fruits[player] = $('#' + player + ' .active').index();
+  //       console.log(fruits)
+  //     }
+  //     if ($('#' + player + ' .active').index() === 85) {
+  //       $('#' + player).addClass("looser");
+  //     }
+  //   }, 40);
+
+  //
+
+  //
+  //     console.log(fruits['Player2'])
+  //   });
+
+  // }
+  // // setTimeout(rayuela('Player2'), 3000);
+  // // rayuela('Player2');
+  // // rayuela("Player1");
+  // function rayuelas() {
+
+  //   $('#Player1').removeClass("winner");
+  //   $('#Player2').removeClass("winner");
+  //   $('#Player1').removeClass("looser");
+  //   $('#Player2').removeClass("looser");
+  //   rayuela('Player1');
+  //   rayuela('Player2');
+  // }
+  // $("#start_btn").click(rayuelas);
 });
 
 
