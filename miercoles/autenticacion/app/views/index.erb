@@ -1,4 +1,15 @@
-  <h1>Bienvenido a Sinatra!</h1>
-  <p>Este es un esqueleto de sinatra que armamos para ti</p>
+<h2>Sign up</h2>
 
-  
+<form action="/register" method="post">
+  <p>Name: <input type="text" name="name"></p>
+  <p>Email: <input type="text" name="email"></p>
+  <p>Password: <input type="text" name="password"></p>
+  <input type="submit">
+</form>
+
+
+<form action="/login" method="post">
+  <p>Email: <input type="text" name="email"></p>
+  <p>Password: <input type="text" name="password"></p>
+  <input type="submit">
+</form>
