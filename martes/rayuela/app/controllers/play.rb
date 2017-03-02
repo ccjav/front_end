@@ -23,6 +23,11 @@ end
 
 post '/results' do
 	# params[:winner]
-	p params[:game]
-	"pong"
+	game = Game.find(params[:game])
+	game.winner = params[:player]
+	game.save
+	# p params[:game]
+	# p params
+	p "juego"
+	p game
 end

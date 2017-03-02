@@ -93,8 +93,7 @@ $(document).ready(function() {
   function results(places) {
     if (places['Player1'] > places['Player2'] && places['Player1'] < 85 && places['Player2'] < 85) {
       $('#Player1').addClass("winner");
-
-      var game = "game=" + $( ".table" ).data("game");
+      var game = "game=" + $( ".table" ).data("game") + "&player=Player1";
       console.log(game);
       $.post( "results", game, function( data ) {
         console.log( data );
@@ -104,14 +103,32 @@ $(document).ready(function() {
       delete places["Player2"];
     } else if (places['Player2'] > places['Player1'] && places['Player2'] < 85 && places['Player1'] < 85) {
       $('#Player2').addClass("winner");
+      var game = "game=" + $( ".table" ).data("game") + "&player=Player2";
+      console.log(game);
+      $.post( "results", game, function( data ) {
+        console.log( data );
+        // $( "#die" ).html( data );
+      });
       delete places["Player1"];
       delete places["Player2"];
     } else if ($("#Player1").hasClass("looser") && places['Player2'] < 85) {
       $('#Player2').addClass("winner");
+      var game = "game=" + $( ".table" ).data("game") + "&player=Player2";
+      console.log(game);
+      $.post( "results", game, function( data ) {
+        console.log( data );
+        // $( "#die" ).html( data );
+      });
       delete places["Player1"];
       delete places["Player2"];
     } else if ($("#Player2").hasClass("looser") && places['Player1'] < 85) {
       $('#Player1').addClass("winner");
+      var game = "game=" + $( ".table" ).data("game") + "&player=Player1";
+      console.log(game);
+      $.post( "results", game, function( data ) {
+        console.log( data );
+        // $( "#die" ).html( data );
+      });
       delete places["Player1"];
       delete places["Player2"];
     }
@@ -119,43 +136,6 @@ $(document).ready(function() {
 
   $("#start_btn").click(juego);
 
-
-
-  // var fruits = {};
-  // function rayuela(player) {
-
-  //   var rayy = setInterval(function() {
-  //     $("#" + player).find(".active").next().addClass('active').prev().removeClass("active");
-  //     if ($('#' + player + ' .active').index() === 102) {
-  //       clearInterval(rayy);
-  //       // fruits[player] = $('#' + player + ' .active').index();
-  //       console.log(fruits)
-  //     }
-  //     if ($('#' + player + ' .active').index() === 85) {
-  //       $('#' + player).addClass("looser");
-  //     }
-  //   }, 40);
-
-  //
-
-  //
-  //     console.log(fruits['Player2'])
-  //   });
-
-  // }
-  // // setTimeout(rayuela('Player2'), 3000);
-  // // rayuela('Player2');
-  // // rayuela("Player1");
-  // function rayuelas() {
-
-  //   $('#Player1').removeClass("winner");
-  //   $('#Player2').removeClass("winner");
-  //   $('#Player1').removeClass("looser");
-  //   $('#Player2').removeClass("looser");
-  //   rayuela('Player1');
-  //   rayuela('Player2');
-  // }
-  // $("#start_btn").click(rayuelas);
 });
 
 
