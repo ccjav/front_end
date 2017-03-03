@@ -1,0 +1,39 @@
+.container {
+  margin: 0 auto;
+  width: 720px;
+}
+
+header {
+  background-color: black;
+}
+
+#logo {
+  display: block;
+  margin: 0 auto;
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  background-color: gray;
+  width: 95%;
+  margin: 1.5em auto;
+  border-radius: .45em;
+  background: linear-gradient(white, gray);
+}
+
+nav ul li {
+  border-right: 2px solid white;
+  padding: .6em 2em;
+}
+
+nav ul li:last-child {
+  border: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: inherit;
+}
