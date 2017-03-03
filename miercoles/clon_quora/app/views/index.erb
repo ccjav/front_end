@@ -1,0 +1,14 @@
+<p><a href="/ask">Ask a question</a></p>
+
+<% if @current_user %>
+  <a href="/profile/<%= @current_user.id %>">Profile</a>
+<% else %>
+  <a href="/signup">Sign up</a>
+  <a href="/signin">Log in</a>
+<% end %>
+
+<% if @all_questions %>
+  <% @all_questions.each do |question| %>
+    <p><%= question.question %></p>
+  <% end %>
+<% end %>

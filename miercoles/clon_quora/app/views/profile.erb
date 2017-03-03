@@ -1,0 +1,10 @@
+<h2>Hi, <%= @user.name %></h2>
+
+<h3>These are your questions:</h3>
+<% if @user_questions %>
+  <ul>
+    <% @user_questions.each do |question| %>
+      <li><a href="/question/<%= question.id %>"><%= question.question %></a></li>
+    <% end %>
+  </ul>
+<% end %>
