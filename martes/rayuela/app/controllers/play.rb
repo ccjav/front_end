@@ -22,12 +22,10 @@ post '/new_game' do
 end
 
 post '/results' do
-	# params[:winner]
+
 	game = Game.find(params[:game])
 	game.winner = params[:player]
 	game.save
-	# p params[:game]
-	# p params
-	p "juego"
-	p game
+	# Round.where(game_id: game.id)
+
 end
